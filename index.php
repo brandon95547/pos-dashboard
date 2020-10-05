@@ -3,18 +3,20 @@
 ?>
 
     <!-- Begin page content -->
-    <main role="main" class="container">
+    <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h1 class="mt-4 mb-4 main-title">ADMIN AREA</h1>
             </div>
         </div>
-        <div class="row ts-3">
-            <div class="col-6 text-right"><a href="./food.php" class="btn-primary btn">FOOD</a></div>
-            <div class="col-6 text-left"><a href="./orders.php" class="btn-primary btn">ORDERS</a></div>
+    </div>
+    <div class="container-fluid p-4 bg-light">
+        <div class="row ts-3 text-center">
+            <div class="col-4"><a href="./food.php" class="btn-primary btn">FOOD</a></div>
+            <div class="col-4"><a href="./orders.php" class="btn-primary btn">ORDERS</a></div>
+            <div class="col-4"><a href="./page-settings.php" class="btn-primary btn">SETTINGS</a></div>
         </div>
-    </main>
-
+    </div>
 <?php
   require "footer.php";
 ?>

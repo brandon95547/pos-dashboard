@@ -352,48 +352,57 @@ class driveInApp {
 
         foodOrderItems.items.forEach(function(subItem, subIndex) {
 
-          printHtml += '<div><strong>' + subItem.title + '</strong>, Quantity: ' + subItem.quantity + '</div>'
+          if(subItem.quantity != 0) {
 
-          let c1 = []
-          let c2 = []
-          let c3 = []
+            printHtml += '<div><strong>' + subItem.title + '</strong>, Quantity: ' + subItem.quantity + '</div>'
 
-          subItem.condiments.forEach((cItem, cIndex) => {
-            switch(cItem.substring(cItem.length - 1, cItem.length)) {
-              case '0' :
-                c1.push(cItem.substring(0, cItem.length - 2));
-              break;
-              case '1' :
-                c2.push(cItem.substring(0, cItem.length - 2));
-              break;
-              case '2' :
-                c3.push(cItem.substring(0, cItem.length - 2));
-              break;
+            let c1 = []
+            let c2 = []
+            let c3 = []
+
+            subItem.condiments.forEach((cItem, cIndex) => {
+              switch(cItem.substring(cItem.length - 1, cItem.length)) {
+                case '0' :
+                  c1.push(cItem.substring(0, cItem.length - 2));
+                break;
+                case '1' :
+                  c2.push(cItem.substring(0, cItem.length - 2));
+                break;
+                case '2' :
+                  c3.push(cItem.substring(0, cItem.length - 2));
+                break;
+              }
+            });
+
+            let c1Markup = '';
+            if(c1.length > 0) {
+              c1.forEach((c1Item) => {
+                c1Markup += c1Item + ',';
+              })
+              printHtml += '<div> &nbsp;&nbsp;&nbsp; #1' + '(' + c1Markup + ')</div>';
             }
-          });
+            let c2Markup = '';
+            if(c2.length > 0) {
+              c2.forEach((c2Item) => {
+                c2Markup += c2Item + ',';
+              })
+              printHtml += '<div> &nbsp;&nbsp;&nbsp; #2' + '(' + c2Markup + ')</div>';
+            }
+            let c3Markup = '';
+            if(c3.length > 0) {
+              c3.forEach((c3Item) => {
+                c3Markup += c3Item + ',';
+              })
+              printHtml += '<div> &nbsp;&nbsp;&nbsp; #3' + '(' + c3Markup + ')</div>';
+            }
+          }
 
-          let c1Markup = '';
-          if(c1.length > 0) {
-            c1.forEach((c1Item) => {
-              c1Markup += c1Item + ',';
-            })
-            printHtml += '<div> &nbsp;&nbsp;&nbsp; #1' + '(' + c1Markup + ')</div>';
-          }
-          let c2Markup = '';
-          if(c2.length > 0) {
-            c2.forEach((c2Item) => {
-              c2Markup += c2Item + ',';
-            })
-            printHtml += '<div> &nbsp;&nbsp;&nbsp; #2' + '(' + c2Markup + ')</div>';
-          }
-          let c3Markup = '';
-          if(c3.length > 0) {
-            c3.forEach((c3Item) => {
-              c3Markup += c3Item + ',';
-            })
-            printHtml += '<div> &nbsp;&nbsp;&nbsp; #3' + '(' + c3Markup + ')</div>';
-          }
-        });
+        }
+          
+          
+        );
+
+      // }
 
         printHtml += "<div>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.</div>";
 

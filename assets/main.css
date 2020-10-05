@@ -15,7 +15,9 @@ h1 {
 .c-secure {
   color: #ad6eff;
 }
-
+.bg-light {
+  background-color: #EEE;
+}
 /* text size */
 .ts-1 div, .ts-1 a {
   font-size: 16px;
