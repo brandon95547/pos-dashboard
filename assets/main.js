@@ -9,6 +9,8 @@ class driveInApp {
   init() {
     var _this = this;
 
+    console.log("site id is " + site_id);
+
     this.setupLoginFormHeader();
     var loginForm = $('#login-nav');
     loginForm.find('button[type="submit"]').click(function(e) {
@@ -63,7 +65,7 @@ class driveInApp {
       // console.log(data);
 
       $.ajax({
-        url: 'http://bluechipadvertising.com/updateOrder.php',
+        url: 'http://bluechipadvertising.com/updateOrder.php?site_id=' + site_id,
         type: 'POST',
         data: { 
           id: data.orderId,
@@ -105,7 +107,7 @@ class driveInApp {
       console.log(data);
 
       $.ajax({
-        url: 'http://bluechipadvertising.com/updateItem.php',
+        url: 'http://bluechipadvertising.com/updateItem.php?site_id=' + site_id,
         type: 'POST',
         data: { 
           id: data.foodId,
@@ -169,7 +171,7 @@ class driveInApp {
       }
 
       $.ajax({
-        url: 'http://bluechipadvertising.com/signup.php',
+        url: 'http://bluechipadvertising.com/signup.php?site_id=' + site_id,
         type: 'POST',
         data: { data },
         dataType: 'json',
@@ -180,7 +182,16 @@ class driveInApp {
           if(data.success === true) {
             _this.createUserSession(data.user);
             setTimeout(function() {
-              window.location = "http://hounds.raptorwebsolutions.com/";
+              let redirectLink = '';
+              switch(site_id) {
+                case 1 :
+                  redirectLink = "http://hounds.raptorwebsolutions.com";
+                  break;
+                case 2 :
+                  redirectLink = "http://ohiodrivein.raptorwebsolutions.com";
+                  break;
+              }
+              window.location = redirectLink;
             }, 1500);
           }
           else {
@@ -209,7 +220,7 @@ class driveInApp {
     let _this = this;
 
     $.ajax({
-      url: 'http://bluechipadvertising.com/getOrderItems.php',
+      url: 'http://bluechipadvertising.com/getOrderItems.php?site_id=' + site_id,
       type: 'GET',
       success: function (data) {
 
@@ -283,7 +294,7 @@ class driveInApp {
     let _this = this;
 
     $.ajax({
-      url: 'http://bluechipadvertising.com/getFoodItems.php',
+      url: 'http://bluechipadvertising.com/getFoodItems.php?site_id=' + site_id,
       type: 'GET',
       success: function (data) {
 
@@ -337,7 +348,7 @@ class driveInApp {
     let receipt = '';
 
     $.ajax({
-      url: 'http://bluechipadvertising.com/getFoodOrder.php?order_id=' + orderId,
+      url: 'http://bluechipadvertising.com/getFoodOrder.php?site_id=' + site_id + '&order_id=' + orderId,
       type: 'GET',
       success: function (data) {
 
@@ -432,7 +443,7 @@ class driveInApp {
     let _this = this;
 
     $.ajax({
-      url: 'http://bluechipadvertising.com/getFoodItem.php?id=' + foodId,
+      url: 'http://bluechipadvertising.com/getFoodItem.php?site_id=' + site_id + '&id=' + foodId,
       type: 'GET',
       success: function (data) {
 
@@ -466,7 +477,7 @@ class driveInApp {
   }
   createUserSession(data) {
     $.ajax({
-      url: '/createUserSession.php',
+      url: '/createUserSession.php?site_id=' + site_id,
       type: 'POST',
       data: { data },
       success: function (data) {

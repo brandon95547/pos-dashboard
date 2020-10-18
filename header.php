@@ -4,6 +4,22 @@
   if($user === null && $_SERVER['REQUEST_URI'] != '/login.php') {
     header("Location: login.php");
   }
+
+  switch($_SERVER['HTTP_HOST']) {
+    case 'hounds.raptorwebsolutions.com' :
+      $site_id = 1;
+      $site_name = 'Hounds Drive In';
+    break;
+
+    case 'ohiodrivein.raptorwebsolutions.com' :
+      $site_id = 2;
+      $site_name = 'Ohio Drive In';
+    break;
+
+    default :
+      $site_id = 0;
+      $site_name = '';
+  }
 ?>
 
 <!doctype html>
@@ -16,7 +32,7 @@
     <meta name="author" content="">
     <link rel="icon" href="./favicon.ico">
 
-    <title>Hounds Drive In Dashboard</title>
+    <title><?php echo $site_name; ?> Dashboard</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sticky-footer-navbar/">
 
@@ -30,6 +46,10 @@
 
     <!-- Custom styles for this template -->
     <link href="./assets/sticky-footer-navbar.css" rel="stylesheet">
+
+    <script>
+      var site_id = <?php echo $site_id; ?>;
+    </script>
 </head>
 
 <body>
@@ -37,7 +57,7 @@
     <header>
         <!-- Fixed navbar -->
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand" href="/">Hounds Dashboard</a>
+            <a class="navbar-brand" href="/"><?php echo $site_name; ?> Dashboard</a>
 
             <?php if($user !== null) : ?>
 
