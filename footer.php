@@ -12,6 +12,22 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="./assets/main.js?v=<?php echo time(); ?>"></script>
 
+    <?php
+        switch($_SERVER['REQUEST_URI']) {
+            case '/' :
+            case '/page-settings.php' :
+            case '/orders.php' :
+            case '/login.php' :
+            case '/food.php' :
+                echo '<script src="./assets/index.js?v=' . time() . '"></script>';
+            break;
+            case '/condiments.php' :
+                echo '<script src="./assets/condiments.js?v=' . time() . '"></script>';
+            break;
+
+        }
+    ?>
+
     <script>
 
     </script>

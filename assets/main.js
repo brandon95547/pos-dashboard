@@ -9,9 +9,10 @@ class driveInApp {
   init() {
     var _this = this;
 
-    console.log("site id is " + site_id);
 
     this.setupLoginFormHeader();
+    this.setupSettingsForm();
+    
     var loginForm = $('#login-nav');
     loginForm.find('button[type="submit"]').click(function(e) {
         e.stopPropagation();
@@ -190,6 +191,9 @@ class driveInApp {
                 case 2 :
                   redirectLink = "http://ohiodrivein.raptorwebsolutions.com";
                   break;
+                case 3 :
+                  redirectLink = "http://mayfield.raptorwebsolutions.com";
+                  break;
               }
               window.location = redirectLink;
             }, 1500);
@@ -202,6 +206,58 @@ class driveInApp {
           // console.log("Request: " + JSON.stringify(request));
           loginForm.find('img').remove();
           loginForm.find('.loader-wrap button').show();
+        }
+      });
+    });
+  }
+  setupSettingsForm() {
+    var settingsForm = $('#settings-form');
+    var _this = this;
+    settingsForm.submit((e) => {
+      
+      e.preventDefault();
+
+      let formData = settingsForm.serializeArray();
+      let error = '';
+
+      // let loader = '<img src="./assets/loading.gif" style="width: 24px; height: 24px">';
+      // settingsForm.find('.loader-wrap').append(loader);
+      // settingsForm.find('.loader-wrap button').hide();
+
+      
+      // build out data object for the post
+      let data = {};
+      formData.map((input) => {
+        data[input.name] = input.value;
+      })
+      
+      if(error !== '') {
+        _this.displayError(error, 'danger');
+      }
+
+      $.ajax({
+        url: 'http://bluechipadvertising.com/store-settings.php?site_id=' + site_id,
+        type: 'POST',
+        data: { data },
+        dataType: 'json',
+        success: function (data) {
+          console.log(data);
+          // settingsForm.find('img').remove();
+          // settingsForm.find('.loader-wrap button').show();
+          if(data.success === true) {
+            // _this.createUserSession(data.user);
+            alert("Settings updated.");
+            
+          }
+          else {
+            _this.displayError('There was an error', 'danger');
+          }
+        },
+        error: function (request, error) {
+          console.log(error);
+          // console.log("Request: " + JSON.stringify(request));
+          // settingsForm.find('img').remove();
+          // settingsForm.find('.loader-wrap button').show();
         }
       });
     });
@@ -232,6 +288,7 @@ class driveInApp {
           <tr>\
             <th scope="col">#</th>\
             <th scope="col">Name</th>\
+            <th scope="col">Time</th>\
             <th scope="col">Action</th>\
           </tr>\
         </thead>\
@@ -253,6 +310,7 @@ class driveInApp {
           ordersTable += '<tr>\
           <td>' + value[1] + '</td>\
           <td>' + value[0] + '</td>\
+          <td>' + value[4] + '</td>\
           <td><button type="button" class="btn order-details-btn' + buttonClass + '" data-id="' + value[1] + '" data-ready="' + value[2] + '">View Order</button></td>\
         </tr>';
         });
@@ -358,8 +416,9 @@ class driveInApp {
         let foodOrderItems = JSON.parse(data.food_order_items);
 
         let printHtml = '<div><strong>Order ID</strong>: ' + orderId + '</div>'
-        printHtml += '<style>body{font-size: 14px;font-family: Arial, sans-serif;}</style>';
+        printHtml += '<style>body{font-size: 19px;font-family: Arial, sans-serif;}</style>';
         printHtml += '<div><strong>Name:</strong> ' + data.name + '<br><br></div>'
+        printHtml += '<div><strong>Time:</strong> ' + data.food_order_dtm + '<br><br></div>'
 
         foodOrderItems.items.forEach(function(subItem, subIndex) {
 
@@ -488,9 +547,169 @@ class driveInApp {
       }
     });
   }
-}
+  getCondiments() {
+    
+    var _this = this;
 
-// Shorthand for $( document ).ready()
-$(document).ready(function() {
-  let app = new driveInApp();
-});
+    $.ajax({
+      url: 'http://bluechipadvertising.com/getCondiments.php?site_id=' + site_id,
+      type: 'GET',
+      success: function (data) {
+        
+        var html = '<table class="table table-striped">';
+        html += '<thead><th>Title</th><th>Active</th><th>Action</th></thead>';
+        JSON.parse(data).forEach(function(row) {
+          html += '<tr><td>' + row.c_title + '</td><td>' + row.active + '</td><td><a class="edit-condiment" data-id="' + row.c_id + '" href="#"><i class="fa fa-pencil c-secure mr-2" aria-hidden="true"></i></a> | <a class="remove-condiment" data-id="' + row.c_id + '" href="#"><i class="fa fa-times c-secure ml-2" aria-hidden="true"></i></a></td></tr>';
+        });
+        html += '</table>';
+
+        document.getElementById("condiments-table").innerHTML = html;
+        _this.setupActions();
+
+      },
+      error: function (request, error) {
+        console.log("Request: " + JSON.stringify(request));
+      }
+    });
+  }
+  setupCondimentsUpdateForm() {
+    var _this = this;
+    $(document).on("submit", "#condimentsForm", function(e) {
+      e.preventDefault();
+
+      // let loader = '<img src="./assets/loading.gif" style="width: 24px; height: 24px">';
+      $('#condimentsForm').find('.loader-wrap img').show();
+      $('#condimentsForm').find('.loader-wrap button').hide();
+
+      let formData = $('#condimentsForm').serializeArray();
+      
+      // build out data object for the post
+      let data = {};
+      formData.map((input) => {
+        data[input.name] = input.value;
+      });
+      
+      $.ajax({
+        url: 'http://bluechipadvertising.com/updateCondiment.php?site_id=' + site_id,
+        type: 'POST',
+        data: { 
+          title: data['condiment-title'],
+          active: data['condiment-active'],
+          condimentId: data['condiment-id']
+        },
+        dataType: 'json',
+        success: function (data) {
+          if(data.success == false) {
+            _this.displayError(data.message, 'danger');
+          }
+          else {
+            $('#condimentsModal').modal("hide");
+            _this.getCondiments();
+          }
+          $('#condimentsForm').find('.loader-wrap img').hide();
+          $('#condimentsForm').find('.loader-wrap button').show();
+        },
+        error: function (request, error) {
+          
+        }
+      });
+
+    });
+  }
+  getCondimentDetails(condimentId) {
+    $.ajax({
+      url: 'http://bluechipadvertising.com/getCondiment.php?site_id=' + site_id,
+      type: 'POST',
+      data: { 
+        condimentId: condimentId
+      },
+      dataType: 'json',
+      success: function (data) {
+        if(data.success == false) {
+          
+        }
+        else {
+          $('#condimentsForm [name="condiment-title"]').val(data.c_title);
+          $('#condimentsForm button[type="submit"]').text("Update");
+          if(data.active == 1) {
+            $('#condimentsForm [name="condiment-active"]').eq(0).attr("checked", "checked");
+          }
+          else {
+            $('#condimentsForm [name="condiment-active"]').eq(1).attr("checked", "checked");
+          }
+        }
+        $('#condimentsForm').find('.loader-wrap img').hide();
+        $('#condimentsForm').find('.loader-wrap button').show();
+      },
+      error: function (request, error) {
+        
+      }
+    });
+  }
+  setupActions() {
+    var _this = this;
+    $('.remove-condiment').on("click", function(e) {
+      e.preventDefault();
+      var condimentId = $(this).attr("data-id");
+      $('#removeCondimentModal [name="condiment-id"]').val(condimentId);
+      $('#removeCondimentModal').modal("show");
+      _this.setupCondimentsRemoveForm();
+    });
+    $('.edit-condiment').on("click", function(e) {
+      e.preventDefault();
+      var condimentId = $(this).attr("data-id");
+      $('#condimentsModal [name="condiment-id"]').val(condimentId);
+      _this.getCondimentDetails(condimentId);
+      $('#condimentsModal').modal("show");
+      _this.setupCondimentsUpdateForm();
+    });
+    $('.add-condiment').on("click", function(e) {
+      $('#condimentsModal').modal("show");
+      _this.setupCondimentsUpdateForm();
+    });
+  }
+  setupCondimentsRemoveForm() {
+    var _this = this;
+    $(document).on("submit", "#removeCondimentForm", function(e) {
+      console.log('remove form submitted');
+      e.preventDefault();
+
+      // let loader = '<img src="./assets/loading.gif" style="width: 24px; height: 24px">';
+      $('#removeCondimentForm').find('.loader-wrap img').show();
+      $('#removeCondimentForm').find('.loader-wrap button').hide();
+
+      let formData = $('#removeCondimentForm').serializeArray();
+      
+      // build out data object for the post
+      let data = {};
+      formData.map((input) => {
+        data[input.name] = input.value;
+      });
+      
+      $.ajax({
+        url: 'http://bluechipadvertising.com/removeCondiment.php?site_id=' + site_id,
+        type: 'POST',
+        data: { 
+          condimentId: data['condiment-id'],
+          condimentRemove: data['condiment-remove']
+        },
+        dataType: 'json',
+        success: function (data) {
+          if(data.success == false) {
+            _this.displayError(data.message, 'danger');
+          }
+          else {
+            $('#removeCondimentModal').modal("hide");
+            _this.getCondiments();
+          }
+          $('#removeCondimentForm').find('.loader-wrap img').hide();
+          $('#removeCondimentForm').find('.loader-wrap button').show();
+        },
+        error: function (request, error) {
+          
+        }
+      });
+
+    });
+  }
+}

@@ -1,5 +1,18 @@
 <?php
   require './header.php';
+  switch($_SERVER['HTTP_HOST']) {
+    case "hounds.raptorwebsolutions.com" :
+      $stores = array("Hounds");
+    break;
+    case "ohiodrivein.raptorwebsolutions.com" :
+      $stores = array("Midway");
+    break;
+    case "mayfield.raptorwebsolutions.com" :
+      $stores = array("Mayfield");
+    break;
+    default :
+    $stores = array();
+  }
 ?>
 
     <!-- Begin page content -->
@@ -13,6 +26,16 @@
         <div class="col-8">
           <div class="errors"></div>
           <form id="login-form" class="ts-3">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Select Store</label>
+              <select class="form-control" name="store">
+                <?php
+                  foreach($stores as $store) {
+                    echo '<option>' . $store . '</option>';
+                  }
+                ?>
+              </select>
+            </div>
             <div class="form-group">
               <label for="exampleInputEmail1">Email</label>
               <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">

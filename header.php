@@ -16,6 +16,11 @@
       $site_name = 'Ohio Drive In';
     break;
 
+    case 'mayfield.raptorwebsolutions.com' :
+      $site_id = 3;
+      $site_name = 'Mayfield Drive In';
+    break;
+
     default :
       $site_id = 0;
       $site_name = '';
@@ -49,6 +54,7 @@
 
     <script>
       var site_id = <?php echo $site_id; ?>;
+      var request_uri = '<?php echo $_SERVER['REQUEST_URI']; ?>';
     </script>
 </head>
 
@@ -70,6 +76,7 @@
                     <a class="dropdown-item" href="/"><i class="fa fa-home" aria-hidden="true"></i> &nbsp;Dashboard</a>
                     <a class="dropdown-item" href="./food.php"><i class="fa fa-cutlery" aria-hidden="true"></i> &nbsp;Food Management</a>
                     <a class="dropdown-item" href="/orders.php"><i class="fa fa-clipboard" aria-hidden="true"></i> &nbsp;Order Management</a>
+                    <a class="dropdown-item" href="/page-settings.php"><i class="fa fa-clipboard" aria-hidden="true"></i> &nbsp;Settings</a>
                     <a class="dropdown-item" href="/logoff.php"><i class="fa fa-lock" aria-hidden="true"></i> Log Off</a>
                   </div>
                 </div>

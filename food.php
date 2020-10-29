@@ -32,7 +32,7 @@
         <div class="errors"></div>
         <div class="form-group">
           <label for="">Name</label>
-          <input type="text" name="foodTitle" class="form-control" id="food-title" placeholder="Name">
+          <input type="text" name="foodTitle" class="form-control" readonly id="food-title" placeholder="Name">
         </div>
         <div class="form-group">
           <label for="">Price</label>

@@ -52,3 +52,5 @@
 [Wed Aug 26 17:26:23.823754 2020] [php7:error] [pid 10712] [client 166.62.80.109:58152] script '/var/www/html/pos-dashboard/wp-login.php' not found or unable to stat
 [Thu Aug 27 04:24:10.713271 2020] [php7:error] [pid 10715] [client 77.247.181.162:50616] script '/var/www/html/pos-dashboard/xmlrpc.php' not found or unable to stat
 [Thu Aug 27 19:09:27.506050 2020] [php7:error] [pid 14060] [client 192.99.246.187:36524] script '/var/www/html/pos-dashboard/wp-login.php' not found or unable to stat
+[Fri Oct 16 21:19:03.366862 2020] [php7:notice] [pid 30999] [client 108.88.236.60:62299] PHP Notice:  Undefined variable: _HEADER in /var/www/html/pos-dashboard/header.php on line 8
+[Fri Oct 16 21:19:03.367342 2020] [php7:notice] [pid 30999] [client 108.88.236.60:62299] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/pos-dashboard/header.php on line 8
