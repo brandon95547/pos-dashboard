@@ -31,6 +31,17 @@ class driveInApp {
     }
     this.setupEvents();
   }
+  setupDatepicker() {
+    var _this = this;
+    $('.datepicker').pickadate({
+      onSet: function(context) {
+        // var d = new Date(e.date);
+        // var date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+        _this.getReport($('.datepicker').val());
+        $('.report-date').html($('.datepicker').val());
+      }
+    });
+  }
   setupEvents() {
     let _this = this;
 
@@ -105,7 +116,7 @@ class driveInApp {
         data[input.name] = input.value;
       });
       
-      console.log(data);
+      // console.log(data);
 
       $.ajax({
         url: 'http://bluechipadvertising.com/updateItem.php?site_id=' + site_id,
@@ -120,7 +131,7 @@ class driveInApp {
         dataType: 'json',
         success: function (data) {
 
-          console.log(data);
+          // console.log(data);
 
           if(data.success == false) {
             _this.displayError(data.message, 'danger');
@@ -171,6 +182,35 @@ class driveInApp {
         _this.displayError(error, 'danger');
       }
 
+      var site_id = 0;
+      switch(data.store) {
+        case "Hounds" :
+          site_id = 1;
+          break;
+        case "Midway" :
+          site_id = 2;
+          break;
+        case "Mayfield" :
+          site_id = 3;
+          break;
+      }
+
+      $.ajax({
+        url: 'setsiteid.php?site_id=' + site_id,
+        type: 'POST',
+        data: { data },
+        dataType: 'json',
+        success: function (data) {
+          // console.log(data);
+
+          
+        },
+        error: function (request, error) {
+          // console.log("Request: " + JSON.stringify(request));
+          
+        }
+      });
+
       $.ajax({
         url: 'http://bluechipadvertising.com/signup.php?site_id=' + site_id,
         type: 'POST',
@@ -189,10 +229,8 @@ class driveInApp {
                   redirectLink = "http://hounds.raptorwebsolutions.com";
                   break;
                 case 2 :
-                  redirectLink = "http://ohiodrivein.raptorwebsolutions.com";
-                  break;
                 case 3 :
-                  redirectLink = "http://mayfield.raptorwebsolutions.com";
+                  redirectLink = "http://ohiodrivein.raptorwebsolutions.com";
                   break;
               }
               window.location = redirectLink;
@@ -241,7 +279,7 @@ class driveInApp {
         data: { data },
         dataType: 'json',
         success: function (data) {
-          console.log(data);
+          // console.log(data);
           // settingsForm.find('img').remove();
           // settingsForm.find('.loader-wrap button').show();
           if(data.success === true) {
@@ -269,7 +307,66 @@ class driveInApp {
     $('.errors').fadeIn();
     setTimeout(function() {
       $('.errors').fadeOut();
-    }, 3000);
+    }, 2000);
+  }
+  getReport(date) {
+
+    let _this = this;
+
+    $.ajax({
+      url: 'http://bluechipadvertising.com/getReport.php?site_id=' + site_id + '&date=' + date,
+      type: 'GET',
+      success: function (data) {
+
+        
+        let orders = JSON.parse(data);
+
+        let items = [];
+        // console.log(orders);
+
+        let ordersTable = '<table class="table">\
+        <thead>\
+          <tr>\
+            <th scope="col">Item</th>\
+            <th scope="col">Quantity Sold</th>\
+          </tr>\
+        </thead>\
+        <tbody>';
+
+        orders.forEach(function (value) {
+
+          value.food_order_items.items.forEach(function (val) {
+            // console.log(val);
+            if(typeof(items[val.title]) === "undefined") {
+              items[val.title] = [val.title, 1]
+            }
+            else {
+              items[val.title][1] += 1;
+            }
+          });
+
+          
+        });
+
+        // use this type of loop on associative
+        for (var key in items) {
+          // console.log(items[key]);
+          ordersTable += '<tr>\
+          <td>' + items[key][0] + '</td>\
+          <td>' + items[key][1] + '</td>\
+        </tr>';
+        }
+
+        ordersTable += '</tbody></table>';
+        
+        $('#report-data').html(ordersTable);
+        
+      },
+      error: function (request, error) {
+        // console.log(error);
+      }
+    });
+    
   }
   getOrders() {
 
@@ -379,7 +476,7 @@ class driveInApp {
           // value[3] id
           // value[4] ready
 
-          ordersTable += '<tr>\
+          ordersTable += '<tr data-id="' + value[3] + '">\
           <td>' + value[0] + '</td>\
           <td>' + value[1] + '</td>\
           <td>' + value[2] + '</td>\
@@ -664,6 +761,8 @@ class driveInApp {
       _this.setupCondimentsUpdateForm();
     });
     $('.add-condiment').on("click", function(e) {
+      $('#condimentsForm [name="condiment-title"]').val('');
+      $('#condimentsModal [name="condiment-id"]').val('');
       $('#condimentsModal').modal("show");
       _this.setupCondimentsUpdateForm();
     });

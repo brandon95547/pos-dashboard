@@ -15,8 +15,17 @@ h1 {
 .c-primary {
   color: #2ae3b0;
 }
+.c-white {
+  color: white;
+}
+.c-primaryDark {
+  color: #008a64;
+}
 .c-secure {
   color: #ad6eff;
+}
+.c-medium {
+  color: #555;
 }
 .bg-light {
   background-color: #EEE;
@@ -70,6 +79,9 @@ h1 {
   background-color: #BBB;
   border-color: #BBB;
 }
+.btn-md {
+  width: 230px;
+}
 .errors {
   display: none;
 }
@@ -99,7 +111,9 @@ table td:last-child, table th:last-child {
   display: none;
   font-size: 14px;
 }
-
+.printer-icon {
+  font-size: 24px;
+}
 @media screen and (min-width: 768px) {
   .justify-end {
     display: flex;
@@ -107,3 +121,4 @@ table td:last-child, table th:last-child {
     flex-grow: 1;
   }
 }
+

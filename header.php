@@ -5,24 +5,22 @@
     header("Location: login.php");
   }
 
-  switch($_SERVER['HTTP_HOST']) {
-    case 'hounds.raptorwebsolutions.com' :
-      $site_id = 1;
+  $site_id = isset($_SESSION['site_id']) ? $_SESSION['site_id'] : 0;
+
+  switch($site_id) {
+    case 1 :
       $site_name = 'Hounds Drive In';
     break;
 
-    case 'ohiodrivein.raptorwebsolutions.com' :
-      $site_id = 2;
+    case 2 :
       $site_name = 'Ohio Drive In';
     break;
 
-    case 'mayfield.raptorwebsolutions.com' :
-      $site_id = 3;
+    case 3 :
       $site_name = 'Mayfield Drive In';
     break;
 
     default :
-      $site_id = 0;
       $site_name = '';
   }
 ?>
@@ -43,6 +41,8 @@
 
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./assets/compressed/themes/classic.css" rel="stylesheet">
+    <link href="./assets/compressed/themes/classic.date.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -63,7 +63,7 @@
     <header>
         <!-- Fixed navbar -->
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand" href="/"><?php echo $site_name; ?> Dashboard</a>
+            <a class="navbar-brand" href="/"><i class="fa fa-home c-white" aria-hidden="true"></i> <?php echo $site_name; ?> Dashboard</a>
 
             <?php if($user !== null) : ?>
 
@@ -76,6 +76,7 @@
                     <a class="dropdown-item" href="/"><i class="fa fa-home" aria-hidden="true"></i> &nbsp;Dashboard</a>
                     <a class="dropdown-item" href="./food.php"><i class="fa fa-cutlery" aria-hidden="true"></i> &nbsp;Food Management</a>
                     <a class="dropdown-item" href="/orders.php"><i class="fa fa-clipboard" aria-hidden="true"></i> &nbsp;Order Management</a>
+                    <a class="dropdown-item" href="/condiments.php"><i class="fa fa-clipboard" aria-hidden="true"></i> &nbsp;Condiments</a>
                     <a class="dropdown-item" href="/page-settings.php"><i class="fa fa-clipboard" aria-hidden="true"></i> &nbsp;Settings</a>
                     <a class="dropdown-item" href="/logoff.php"><i class="fa fa-lock" aria-hidden="true"></i> Log Off</a>
                   </div>

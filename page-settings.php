@@ -18,7 +18,7 @@
     <main role="main" class="container">
       <div class="row">
           <div class="col-lg-12 text-center">
-              <h1 class="mt-4 mb-4 main-title">SETTINGS</h1>
+              <h1 class="pt-5 pb-4 main-title">SETTINGS</h1>
           </div>
       </div>
       <div class="row">
